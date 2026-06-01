@@ -1,11 +1,11 @@
 package model;
 
 public class Paciente {
-    String nome; 
-    String cpf; 
-    int prioridade; // (na escala de 1 a 5)
-    int idade; // seria algo pego diretamente no cpf, mas para facilitar o nosso caso né
-    boolean idoso = false; // acho que ficou meio redundante por conta da idade, mas fica melhor trabalhar com o boolean
+    public String nome; 
+    private String cpf; 
+    public int prioridade; // (na escala de 1 a 5)
+    private int idade; // seria algo pego diretamente no cpf, mas para facilitar o nosso caso né
+    private boolean idoso = false; // acho que ficou meio redundante por conta da idade, mas fica melhor trabalhar com o boolean
     
     public Paciente(String nome, String cpf, int prioridade, int idade) {
         this.nome = nome;
