@@ -18,10 +18,5 @@ public class No {
     No(Paciente p){
         this(p,null, null); // revisar se é a melhor maneira, pq o paciente vai entrar nulo tbm(embora que essa No só seja usado como auxiliar)
     }
-
-    public String getPaciente(){
-        return paciente.getNome();
-    }
-    
 }
 
