@@ -1,6 +1,6 @@
-package service;
+package controller;
 
-import estrutura.Lista;
+import model.estrutura.Lista;
 import model.Paciente;
 
 /**
@@ -47,6 +47,7 @@ public class FilaService {
     public Paciente atendimento() {
         // cenário 1: As duas filas estão vazias
         if (filaPreferencial.estaVazia() && filaComum.estaVazia()) {
+            resetarContadores();
             return null;
         }
 
@@ -68,24 +69,45 @@ public class FilaService {
             contadorPreferencial++;
             return filaPreferencial.removeDaFrente();
 
-        } else if (contadorComum < 2) {
+        } else {
             // vez dos preferenciais acabou, chamando os comuns
             contadorComum++;
             Paciente pacienteChamado = filaComum.removeDaFrente();
 
             // se completou o ciclo (já chamou 2 comuns), reseta para a próxima chamada
-            if (contadorComum == 2) {
+            if (contadorComum >= 2) {
                 resetarContadores();
             }
             return pacienteChamado;
         }
-
-        return null;
     }
 
     // método auxiliar privado para zerar o ciclo
     private void resetarContadores() {
-        contadorPreferencial = 0;
-        contadorComum = 0;
+        this.contadorPreferencial = 0;
+        this.contadorComum = 0;
+    }
+
+    public Lista getFilaPreferencial() {
+        return this.filaPreferencial;
+    }
+
+    public Lista getFilaComum() {
+        return this.filaComum;
+    }
+
+    public void mostrarEstadoDasFilas() {
+        System.out.println("\n--- ESTADO ATUAL DAS FILAS ---");
+        filaPreferencial.mostra();
+        filaComum.mostra();
+        System.out.println("Contadores do Ciclo -> Preferencial: " + contadorPreferencial + " | Comum: " + contadorComum);
+        System.out.println("-------------------------------\n");
+    }
+
+    public void reiniciarFilas() {
+        this.filaPreferencial = new Lista("Fila Preferencial");
+        this.filaComum = new Lista("Fila Comum");
+        resetarContadores();
+        System.out.println("Sistema reiniciado com sucesso.");
     }
 }

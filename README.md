@@ -6,7 +6,7 @@ Sistema de gerenciamento de fila de atendimento hospitalar baseado em prioridade
 
 ## 🏗️ Arquitetura e Estrutura
 
-O projeto utiliza uma estrutura modular dividida por responsabilidades, implementando uma **Lista Duplamente Encadeada** própria para a gestão das regras de negócio.
+O projeto utiliza uma model.estrutura modular dividida por responsabilidades, implementando uma **Lista Duplamente Encadeada** própria para a gestão das regras de negócio.
 
 ![Arquitetura do Sistema](image.png)
 
@@ -17,11 +17,11 @@ hospital-fila/
 │   │   ├── Paciente.java              # Entidade do domínio
 │   │   ├── No.java                    # Nó da lista encadeada
 │   │   └── TipoPrioridade.java        # Enum (PRIORIDADE, PREFERENCIAL, COMUM)
-│   ├── estrutura/
+│   ├── model.estrutura/
 │   │   └── ListaDuplamenteEncadeada.java # Estrutura de dados customizada
 │   ├── service/
 │   │   └── FilaService.java           # Regras de negócio da fila
-│   └── ui/
+│   └── view/
 │       ├── TelaRecepcao.java          # Entrada de pacientes
 │       ├── PainelChamada.java         # Painel visual/sonoro de chamadas
 │       └── TelaAdmin.java             # Monitoramento e gestão

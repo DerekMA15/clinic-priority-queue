@@ -1,7 +1,7 @@
 
 // import java.util.Scanner;
 
-import estrutura.Lista;
+import model.estrutura.Lista;
 import model.Paciente;
 
 public class Main
