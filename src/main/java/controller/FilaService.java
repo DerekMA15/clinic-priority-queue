@@ -87,4 +87,27 @@ public class FilaService {
         this.contadorPreferencial = 0;
         this.contadorComum = 0;
     }
+
+    public Lista getFilaPreferencial() {
+        return this.filaPreferencial;
+    }
+
+    public Lista getFilaComum() {
+        return this.filaComum;
+    }
+
+    public void mostrarEstadoDasFilas() {
+        System.out.println("\n--- ESTADO ATUAL DAS FILAS ---");
+        filaPreferencial.mostra();
+        filaComum.mostra();
+        System.out.println("Contadores do Ciclo -> Preferencial: " + contadorPreferencial + " | Comum: " + contadorComum);
+        System.out.println("-------------------------------\n");
+    }
+
+    public void reiniciarFilas() {
+        this.filaPreferencial = new Lista("Fila Preferencial");
+        this.filaComum = new Lista("Fila Comum");
+        resetarContadores();
+        System.out.println("Sistema reiniciado com sucesso.");
+    }
 }
