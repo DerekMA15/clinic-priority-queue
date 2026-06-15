@@ -1,4 +1,4 @@
-package ui;
+package view;
 
 public class TelaRecepcao {
     
