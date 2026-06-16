@@ -1,19 +1,19 @@
 package controller;
 
-import javafx.application.Platform;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.util.Duration;
+import javafx.scene.control.*;
+import javafx.fxml.Initializable;
 import model.Paciente;
-import controller.FilaService;
+import model.estrutura.No;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.geometry.Insets;
+import javafx.scene.layout.GridPane;
+import javafx.scene.control.ButtonBar.ButtonData;
 
 //Classe que interage com a interface, atualizando informações e executando comandos
-public class MainController {
+public class MainController implements Initializable{
     //ATTRIBUTES
     //Botões
     @FXML private Button btnInserir;
@@ -34,7 +34,6 @@ public class MainController {
 
     //Gerenciadores
     private FilaService fila;
-    private AdminController admin;
 
     //Contador para a barra de status
     private int totalAtendidos = 0;
@@ -42,10 +41,9 @@ public class MainController {
     //METHODS
 
     //Inicializa o sistema
-    @FXML
-    public void inicializar() {
+    @Override
+    public void initialize(URL caminho, ResourceBundle resources) {
         this.fila = new FilaService();
-        this.admin = new AdminController(this.fila);
 
         //iniciarRelogio(); //Caso dê tempo de implementar
 
@@ -54,20 +52,98 @@ public class MainController {
 
     //Lógica ao apertar o botão de inserir paciente
     @FXML
-    public void handleInserirPaciente() {
+    private void handleInserirPaciente(ActionEvent event) {
+        Dialog<Paciente> dialog = new Dialog<>();
+        dialog.setTitle("Recepção - Cadastrar Novo Paciente");
+        dialog.setHeaderText("Insira os dados da triagem do paciente");
 
+        ButtonType botaoConfirmarTipo = new ButtonType("Adicionar à Fila", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(botaoConfirmarTipo, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField txtNome = new TextField();
+        txtNome.setPromptText("Nome Completo");
+        TextField txtCpf = new TextField();
+        txtCpf.setPromptText("000.000.000-00");
+        TextField txtIdade = new TextField();
+        txtIdade.setPromptText("Ex: 25");
+
+        ComboBox<Integer> comboGravidade = new ComboBox<>();
+        comboGravidade.getItems().addAll(1, 2, 3, 4, 5);
+        comboGravidade.setValue(1);
+
+        CheckBox chkPcd = new CheckBox("PCD (Pessoa com Deficiência)");
+        CheckBox chkGestante = new CheckBox("Gestante");
+
+        grid.add(new Label("Nome:"), 0, 0);
+        grid.add(txtNome, 1, 0);
+        grid.add(new Label("CPF:"), 0, 1);
+        grid.add(txtCpf, 1, 1);
+        grid.add(new Label("Idade:"), 0, 2);
+        grid.add(txtIdade, 1, 2);
+        grid.add(new Label("Gravidade (1 a 5):"), 0, 3);
+        grid.add(comboGravidade, 1, 3);
+        grid.add(chkPcd, 1, 4);
+        grid.add(chkGestante, 1, 5);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogBotao -> {
+            if (dialogBotao == botaoConfirmarTipo) {
+                try {
+                    String nome = txtNome.getText();
+                    String cpf = txtCpf.getText();
+                    int idade = Integer.parseInt(txtIdade.getText());
+                    int gravidade = comboGravidade.getValue();
+                    boolean pcd = chkPcd.isSelected();
+                    boolean gestante = chkGestante.isSelected();
+
+                    return new Paciente(nome, cpf, gravidade, idade, pcd, gestante);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(paciente -> {
+            fila.inserirNaFila(paciente);
+            atualizarInterface();
+        });
     }
 
     //Lógica ao apertar o botão de atendimento
     @FXML
-    public void handleAtendimento() {
-
+    private void handleAtendimento(ActionEvent event) {
+        Paciente chamado = this.fila.atendimento();
+        if (chamado != null) {
+            totalAtendidos++;
+            lblNomeChamado.setText(chamado.getNome().toUpperCase() + (chamado.isPreferencial() ? " (Preferencial)" : " (Comum)"));
+            lblDetalhesChamado.setText(String.format("CPF: %s | Gravidade: %d", chamado.getCpf(), chamado.getPrioridade()));
+            //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+            //lblHora.setText("⏱️ Chamado às " + LocalDateTime.now().format(dtf));
+        } else {
+            lblNomeChamado.setText("NENHUM PACIENTE NA FILA");
+            lblDetalhesChamado.setText("As filas de espera estão zeradas.");
+            //lblHora.setText("");
+        }
+        atualizarInterface();
     }
 
     //Lógica ao apertar o botão de reiniciar o sistema
     @FXML
-    public void handleReiniciarSistema() {
-
+    private void handleReiniciarSistema(ActionEvent event) {
+        // Reinicia as listas criando novas instâncias vazias
+        fila = new FilaService();
+        totalAtendidos = 0;
+        lblNomeChamado.setText("SISTEMA REINICIADO");
+        lblDetalhesChamado.setText("Aguardando novos pacientes.");
+        //lblHora.setText("");
+        atualizarInterface();
     }
 
 //    private void iniciarRelogio() { //Caso dê tempo de implementar
@@ -77,6 +153,25 @@ public class MainController {
 
     //Sincroniza a lista com a interface a cada alteração
     private void atualizarInterface() {
+        listViewPreferencial.getItems().clear();
+        listViewComum.getItems().clear();
 
+        No atualPref = this.fila.getFilaPreferencial().getPrimNode();
+        int cont = 1;
+        while (atualPref != null) {
+            Paciente p = atualPref.paciente;
+            listViewPreferencial.getItems().add(String.format("%d. %s (G:%d)", cont++, p.getNome(), p.getPrioridade()));
+            atualPref = atualPref.next;
+        }
+
+        No atualComum = this.fila.getFilaComum().getPrimNode();
+        cont = 1;
+        while (atualComum != null) {
+            Paciente p = atualComum.paciente;
+            listViewComum.getItems().add(String.format("%d. %s (G:%d)", cont++, p.getNome(), p.getPrioridade()));
+            atualComum = atualComum.next;
+        }
+
+        lblStatusDasFilas.setText(String.format("Status das Filas: Operacional | Atendimentos no Turno: %d", totalAtendidos));
     }
 }
