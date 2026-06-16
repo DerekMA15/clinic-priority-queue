@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://fxml.com/fxml/1"
+            fx:controller="controller.MainController"
+            prefHeight="650.0" prefWidth="1050.0"
+            style="-fx-background-color: #90CDE9; -fx-padding: 10 15 10 15;">
+
+    <top>
+        <Label text="SISTEMA DE ATENDIMENTO HOSPITALAR - ADMINISTRAÇÃO"
+               alignment="CENTER" maxWidth="Infinity"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2C3E50; -fx-padding: 0 0 10 0;"/>
+    </top>
+
+    <center>
+        <HBox spacing="15.0" style="-fx-background-color: #F0F8FC; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #B0D4E3; -fx-border-width: 2; -fx-padding: 15;">
+
+            <VBox spacing="15.0" prefWidth="260.0" alignment="TOP_CENTER"
+                  style="-fx-background-color: white; -fx-border-color: #BDE0F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-width: 1; -fx-padding: 15;">
+
+                <Label text="AÇÕES DA RECEPÇÃO" style="-fx-font-weight: bold; -fx-text-fill: #4A4A4A;"/>
+
+                <Button text="+ INSERIR PACIENTE" onAction="#handleInserirPaciente" maxWidth="Infinity" minHeight="50.0"
+                        style="-fx-background-color: #5CB85C; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 25; -fx-cursor: hand;"/>
+
+                <Button text="PRÓXIMA CHAMADA" onAction="#handleAtendimento" maxWidth="Infinity" minHeight="50.0" textAlignment="CENTER"
+                        style="-fx-background-color: #308CC6; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 25; -fx-cursor: hand;"/>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <Button text="REINICIAR SISTEMA" onAction="#handleReiniciarSistema" maxWidth="Infinity" minHeight="50.0"
+                        style="-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 25; -fx-cursor: hand;"/>
+            </VBox>
+
+            <VBox spacing="15.0" HBox.hgrow="ALWAYS">
+
+                <VBox spacing="10.0" alignment="CENTER" style="-fx-background-color: #FCE48B; -fx-border-color: #E2C974; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 25;">
+                    <Label text="PAINEL PRINCIPAL DE CHAMADA" style="-fx-font-weight: bold; -fx-text-fill: #4A4A4A;"/>
+
+                    <Label fx:id="lblNomeChamado" text="PAINEL LIVRE" textAlignment="CENTER"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #227396;"/>
+
+                    <Label fx:id="lblDetalhesChamado" text="Aguardando chamada de pacientes..." style="-fx-font-size: 15px; -fx-text-fill: #333333;"/>
+                </VBox>
+
+                <VBox spacing="10.0" style="-fx-background-color: white; -fx-border-color: #BDE0F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15;" VBox.vgrow="ALWAYS">
+                    <Label text="FILAS DE ESPERA - PRIMEIROS PACIENTES" maxWidth="Infinity" alignment="CENTER" style="-fx-font-weight: bold; -fx-text-fill: #4A4A4A;"/>
+
+                    <HBox spacing="15.0" VBox.vgrow="ALWAYS">
+                        <VBox HBox.hgrow="ALWAYS" spacing="5">
+                            <Label text="FILA PREFERENCIAL (1ºs da Fila)" style="-fx-font-weight: bold; -fx-text-fill: #4A4A4A;"/>
+                            <ListView fx:id="listViewPreferencial" VBox.vgrow="ALWAYS" style="-fx-background-color: #F8FCFD; -fx-border-color: #CBE6F3;"/>
+                        </VBox>
+
+                        <VBox HBox.hgrow="ALWAYS" spacing="5">
+                            <Label text="FILA COMUM (1ºs da Fila)" style="-fx-font-weight: bold; -fx-text-fill: #4A4A4A;"/>
+                            <ListView fx:id="listViewComum" VBox.vgrow="ALWAYS" style="-fx-background-color: #F8FCFD; -fx-border-color: #CBE6F3;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </HBox>
+    </center>
+
+    <bottom>
+        <Label fx:id="lblStatusDasFilas" text="Status das Filas: Operacional | Atendimentos no Turno: 0"
+               maxWidth="Infinity" alignment="CENTER" style="-fx-padding: 8 0 0 0; -fx-font-size: 13px; -fx-text-fill: #2C3E50;"/>
+    </bottom>
+</BorderPane>

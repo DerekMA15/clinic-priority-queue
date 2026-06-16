@@ -3,9 +3,9 @@ package model.estrutura;
 import model.Paciente;
 
 public class No {
-    Paciente paciente; 
+    public Paciente paciente;
     No prev; // no anterior
-    No next; // proximo no 
+    public No next; // proximo no
 
 
     //inserirOrdenado(Paciente p)
