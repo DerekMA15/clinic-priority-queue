@@ -3,20 +3,12 @@ package controller;
 import model.estrutura.Lista;
 import model.Paciente;
 
-/**
- * para implementar a regra 3:2 (3 preferenciais para 2 comuns) de uma forma mais facilitada, a melhor maneira
- * é que essa classe gerencie duas listas separadas, uma preferencial e outra comum
- * se for pra gente colocar todos numa lista só, tirar um paciente comum enquanto ainda há preferenciais na frente
- * exigiria de métodos mais complexos para "pular" nós no meio da lista encadeada
- * então preferi e achei mais simples isso ser feito com uma lista pra cada
- */
-
 public class FilaService {
 
     private Lista filaPreferencial;
     private Lista filaComum;
 
-    // contadores para controlar a regra 3:2
+    // Contadores para controlar a regra 3:2
     private int contadorPreferencial;
     private int contadorComum;
 
@@ -28,9 +20,9 @@ public class FilaService {
     }
 
     /**
-     * insere o paciente na fila correta
-     * o método inserirOrdenado (configurado na Lista) garantirá que
-     * a prioridade de gravidade (5 a 1) seja respeitada dentro de cada fila
+     * Insere o paciente na fila correta.
+     * O método inserirOrdenado (configurado na Lista) garantirá que
+     * a prioridade de gravidade (5 a 1) seja respeitada dentro de cada fila.
      */
     public void inserirNaFila(Paciente paciente) {
         if (paciente.isPreferencial()) {
@@ -41,48 +33,64 @@ public class FilaService {
     }
 
     /**
-     * remove e retorna o próximo paciente a ser atendido,
-     * aplicando a regra de intercalação 3:2.
+     * Remove e retorna o próximo paciente a ser atendido.
+     * Lógica Mista: Gravidade Absoluta + Desempate Proporcional (3:2).
      */
     public Paciente atendimento() {
-        // cenário 1: As duas filas estão vazias
+        // Cenário 1: As duas filas estão vazias
         if (filaPreferencial.estaVazia() && filaComum.estaVazia()) {
             resetarContadores();
             return null;
         }
 
-        // cenário 2: Só tem pacientes na Fila Comum
+        // Cenário 2: Só tem pacientes na Fila Comum
         if (filaPreferencial.estaVazia()) {
-            resetarContadores(); // Reseta para iniciar um ciclo limpo quando chegar preferencial
+            resetarContadores();
             return filaComum.removeDaFrente();
         }
 
-        // cenário 3: Só tem pacientes na Fila Preferencial
+        // Cenário 3: Só tem pacientes na Fila Preferencial
         if (filaComum.estaVazia()) {
             resetarContadores();
             return filaPreferencial.removeDaFrente();
         }
 
-        // cenário 4: Regra 3:2 (ambas as filas têm pacientes)
-        if (contadorPreferencial < 3) {
-            // ainda é a vez dos preferenciais
-            contadorPreferencial++;
+        // Cenário 4: Ambas as filas têm pacientes aguardando
+        // Vamos "espiar" as cabeças das listas sem remover ninguém ainda
+        Paciente primeiroPref = filaPreferencial.getPrimNode().paciente;
+        Paciente primeiroComum = filaComum.getPrimNode().paciente;
+
+        // REGRA A: Gravidade Absoluta (Emergências atropelam o ciclo)
+        if (primeiroPref.getPrioridade() > primeiroComum.getPrioridade()) {
+            resetarContadores(); // Reseta porque uma emergência quebrou a contagem normal
             return filaPreferencial.removeDaFrente();
+        }
+        else if (primeiroComum.getPrioridade() > primeiroPref.getPrioridade()) {
+            resetarContadores(); // Reseta pelo mesmo motivo
+            return filaComum.removeDaFrente();
+        }
 
-        } else {
-            // vez dos preferenciais acabou, chamando os comuns
-            contadorComum++;
-            Paciente pacienteChamado = filaComum.removeDaFrente();
+        // REGRA B: Gravidades Iguais (Aplica a regra de intercalação 3:2)
+        else {
+            if (contadorPreferencial < 3) {
+                // Ainda é a vez da fila preferencial no ciclo
+                contadorPreferencial++;
+                return filaPreferencial.removeDaFrente();
+            } else {
+                // A vez da preferencial acabou, chamando os comuns
+                contadorComum++;
+                Paciente pacienteChamado = filaComum.removeDaFrente();
 
-            // se completou o ciclo (já chamou 2 comuns), reseta para a próxima chamada
-            if (contadorComum >= 2) {
-                resetarContadores();
+                // Se completou o ciclo inteiro (já chamou 2 comuns), reseta para o próximo
+                if (contadorComum >= 2) {
+                    resetarContadores();
+                }
+                return pacienteChamado;
             }
-            return pacienteChamado;
         }
     }
 
-    // método auxiliar privado para zerar o ciclo
+    // Método auxiliar privado para zerar o ciclo
     private void resetarContadores() {
         this.contadorPreferencial = 0;
         this.contadorComum = 0;
