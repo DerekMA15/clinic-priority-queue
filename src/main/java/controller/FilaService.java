@@ -1,6 +1,6 @@
 package controller;
 
-import model.estrutura.Lista;
+import estrutura.Lista;
 import model.Paciente;
 
 public class FilaService {

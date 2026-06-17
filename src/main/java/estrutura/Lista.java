@@ -1,4 +1,4 @@
-package model.estrutura;
+package estrutura;
 
 import model.Paciente;
 
@@ -8,7 +8,7 @@ public class Lista
 {
     private No primNode;
     private No ultiNode;
-    private No copia = null;
+    //private No copia = null;
     private String nomeLista;
     
     

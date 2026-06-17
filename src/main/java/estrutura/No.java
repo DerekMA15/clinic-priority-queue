@@ -1,4 +1,4 @@
-package model.estrutura;
+package estrutura;
 
 import model.Paciente;
 

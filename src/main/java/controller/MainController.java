@@ -5,9 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.fxml.Initializable;
 import model.Paciente;
-import model.estrutura.No;
+
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import estrutura.No;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -92,29 +94,45 @@ public class MainController implements Initializable{
 
         dialog.getDialogPane().setContent(grid);
 
-        dialog.setResultConverter(dialogBotao -> {
-            if (dialogBotao == botaoConfirmarTipo) {
-                try {
-                    String nome = txtNome.getText();
-                    String cpf = txtCpf.getText();
-                    int idade = Integer.parseInt(txtIdade.getText());
-                    int gravidade = comboGravidade.getValue();
-                    boolean pcd = chkPcd.isSelected();
-                    boolean gestante = chkGestante.isSelected();
+            dialog.setResultConverter(dialogBotao -> {
+                if (dialogBotao == botaoConfirmarTipo) {
+                    try {
+                        String nome = txtNome.getText().trim();
+                        String cpf = txtCpf.getText().replaceAll("[^0-9]", ""); // remove pontos e traço
+                        int idade = Integer.parseInt(txtIdade.getText().trim());
+                        int gravidade = comboGravidade.getValue();
+                        boolean pcd = chkPcd.isSelected();
+                        boolean gestante = chkGestante.isSelected();
 
-                    return new Paciente(nome, cpf, gravidade, idade, pcd, gestante);
-                } catch (NumberFormatException e) {
-                    return null;
+                        // Valida o CPF ANTES de criar o paciente
+                        if (!model.util.ValidaCPF.isCPF(cpf)) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("CPF Inválido");
+                            alert.setHeaderText("Não foi possível cadastrar o paciente");
+                            alert.setContentText("O CPF informado é inválido. Verifique e tente novamente.");
+                            alert.showAndWait();
+                            return null; // Bloqueia a inserção
+                        }
+
+                        return new Paciente(nome, cpf, gravidade, idade, pcd, gestante);
+
+                    } catch (NumberFormatException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Dados Inválidos");
+                        alert.setHeaderText("Campo de idade inválido");
+                        alert.setContentText("Por favor, insira um número válido para a idade.");
+                        alert.showAndWait();
+                        return null;
+                    }
                 }
-            }
-            return null;
-        });
+                return null;
+            });
 
-        dialog.showAndWait().ifPresent(paciente -> {
-            fila.inserirNaFila(paciente);
-            atualizarInterface();
-        });
-    }
+                    dialog.showAndWait().ifPresent(paciente -> {
+                        fila.inserirNaFila(paciente);
+                        atualizarInterface();
+                    });
+                    }
 
     //Lógica ao apertar o botão de atendimento
     @FXML

@@ -1,5 +1,6 @@
 package model;
 
+
 public class Paciente {
     public String nome; 
     private String cpf; 
@@ -13,7 +14,14 @@ public class Paciente {
 
     public Paciente(String nome, String cpf, int prioridade, int idade, boolean pcd, boolean gestante) {
         this.nome = nome;
-        this.cpf = cpf;
+        // validar cpf 
+        
+        if(model.util.ValidaCPF.isCPF(cpf) == true){
+            this.cpf = cpf;
+        }else {
+            System.out.println("CPF invalido");
+            this.cpf = "erro";
+        }
         this.prioridade = prioridade;
         this.idade = idade;
         this.pcd = pcd;
