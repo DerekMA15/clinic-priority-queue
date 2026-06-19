@@ -82,6 +82,8 @@ clinic-priority-queue/
 │   │   └── Main.java                 # Ponto de entrada (Inicialização do JavaFX)
 │   ├── model/
 │   │   ├── estrutura/                # Estruturas de dados customizadas (Lista encadeada, Nós)
+│   │   │   ├── Lista.java            # Lista duplamente encadeada
+│   │   │   └── No.java               # Nó da lista duplamente encadeada
 │   │   └── Paciente.java             # Entidade representando o paciente
 │   ├── util/
 │   │   └── ValidaCPF.java            # Métodos utilitários de validação
@@ -98,12 +100,12 @@ clinic-priority-queue/
 
 | Camada | Responsabilidade |
 | :--- | :--- |
-| `model` | Contém a entidade principal do domínio (Paciente). |
 | `controller` | Controladores de interface que gerenciam as interações do usuário e o fluxo das telas, além do processamento das regras da fila. |
-| `model.estrutura` | Camada dedicada à implementação da estrutura de dados (Lista encadeada/Nós). |
-| `view` | Componentes visuais da interface, fábricas de elementos de tela e execução do layout. |
-| `util` | Classes utilitárias e funções auxiliares desacopladas, como o validador ValidaCPF. |
 | `main` | Ponto de entrada da aplicação, encarregado de inicializar o ciclo de vida do JavaFX. |
+| `model` | Contém a entidade principal do domínio (Paciente). |
+| `model.estrutura` | Camada dedicada à implementação da estrutura de dados (Lista encadeada/Nós). |
+| `util` | Classes utilitárias e funções auxiliares desacopladas, como o validador ValidaCPF. |
+| `view` | Componentes visuais da interface, fábricas de elementos de tela e execução do layout. |
 
 ---
 
