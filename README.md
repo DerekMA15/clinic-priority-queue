@@ -23,7 +23,7 @@
 
 Este sistema simula a gestão de filas de uma clínica/UPA, onde pacientes são atendidos **não por ordem de chegada**, mas por uma combinação de **gravidade clínica** e **direito preferencial** (idosos, PCDs e gestantes).
 
-A estrutura de dados central é uma **Lista Duplamente Encadeada** implementada do zero, sem uso de `java.util.LinkedList`, garantindo controle total sobre a ordenação e remoção dos nós.
+A model.estrutura de dados central é uma **Lista Duplamente Encadeada** implementada do zero, sem uso de `java.util.LinkedList`, garantindo controle total sobre a ordenação e remoção dos nós.
 
 ---
 
@@ -78,7 +78,7 @@ hospital-fila/
 │   │   ├── Paciente.java                    # Entidade principal com validação de CPF
 │   │   ├── No.java                          # Nó da lista duplamente encadeada
 │   │   └── TipoPrioridade.java             # Enum: PRIORIDADE, PREFERENCIAL, COMUM
-│   ├── model.estrutura/
+│   ├── model.model.estrutura/
 │   │   └── ListaDuplamenteEncadeada.java    # Estrutura de dados customizada
 │   ├── service/
 │   │   └── FilaService.java                # Regras de negócio: inserção e chamada
@@ -94,7 +94,7 @@ hospital-fila/
 | Camada | Responsabilidade |
 | :--- | :--- |
 | `model` | Entidades de domínio e validações (CPF, idade, tipo) |
-| `model.estrutura` | Implementação da lista duplamente encadeada com inserção ordenada |
+| `model.model.estrutura` | Implementação da lista duplamente encadeada com inserção ordenada |
 | `service` | Lógica de negócio: qual fila recebe, qual paciente é chamado, ciclo 3:2 |
 | `view` | Interface JavaFX: formulários, painéis e interações com o usuário |
 
