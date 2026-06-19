@@ -9,7 +9,7 @@ import model.Paciente;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import estrutura.No;
+import model.estrutura.No;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -105,7 +105,7 @@ public class MainController implements Initializable{
                         boolean gestante = chkGestante.isSelected();
 
                         // Valida o CPF ANTES de criar o paciente
-                        if (!model.util.ValidaCPF.isCPF(cpf)) {
+                        if (!util.ValidaCPF.isCPF(cpf)) {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("CPF Inválido");
                             alert.setHeaderText("Não foi possível cadastrar o paciente");

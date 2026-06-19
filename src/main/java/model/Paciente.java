@@ -16,7 +16,7 @@ public class Paciente {
         this.nome = nome;
         // validar cpf 
         
-        if(model.util.ValidaCPF.isCPF(cpf) == true){
+        if(util.ValidaCPF.isCPF(cpf) == true){
             this.cpf = cpf;
         }else {
             System.out.println("CPF invalido");

@@ -131,7 +131,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>
                 <configuration>
-                    <mainClass>main.Launcher</mainClass>
+                    <mainClass>main.Main</mainClass>
                     <!-- Abre os módulos necessários para reflexão do JavaFX -->
                     <options>
                         <option>--add-opens</option>

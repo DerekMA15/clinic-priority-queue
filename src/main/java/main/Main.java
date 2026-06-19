@@ -1,6 +1,8 @@
 package main;
 
-public class Launcher {
+import view.SistemaAtendimento;
+
+public class Main {
     public static void main(String[] args) {
         SistemaAtendimento.main(args);
     }
