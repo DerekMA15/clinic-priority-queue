@@ -6,4 +6,5 @@ module hospital.atendimento {
     opens controller to javafx.fxml;
 
     opens model to javafx.base;
+    opens view to javafx.fxml, javafx.graphics;
 }

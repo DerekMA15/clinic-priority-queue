@@ -72,31 +72,38 @@ Preferencial → Preferencial → Preferencial → Comum → Comum → [reinicia
 O projeto segue uma separação clara de responsabilidades em camadas:
 
 ```text
-hospital-fila/
+clinic-priority-queue/
 ├── src/main/java/
+│   ├── controller/
+│   │   ├── AdminController.java      # Controle e lógica da tela de administração
+│   │   ├── FilaService.java          # Regras de negócio, inserção e chamadas na fila
+│   │   └── MainController.java       # Controlador principal da aplicação
+│   ├── main/
+│   │   └── Main.java                 # Ponto de entrada (Inicialização do JavaFX)
 │   ├── model/
-│   │   ├── Paciente.java                    # Entidade principal com validação de CPF
-│   │   ├── No.java                          # Nó da lista duplamente encadeada
-│   │   └── TipoPrioridade.java             # Enum: PRIORIDADE, PREFERENCIAL, COMUM
-│   ├── model.estrutura/
-│   │   └── ListaDuplamenteEncadeada.java    # Estrutura de dados customizada
-│   ├── service/
-│   │   └── FilaService.java                # Regras de negócio: inserção e chamada
+│   │   ├── estrutura/                # Estruturas de dados customizadas (Lista encadeada, Nós)
+│   │   └── Paciente.java             # Entidade representando o paciente
+│   ├── util/
+│   │   └── ValidaCPF.java            # Métodos utilitários de validação
 │   └── view/
-│       ├── TelaRecepcao.java               # Formulário de entrada de pacientes
-│       ├── PainelChamada.java              # Painel visual/sonoro de chamadas
-│       └── TelaAdmin.java                  # Monitoramento e gestão administrativa
-└── pom.xml                                 # Configuração Maven e dependências
+│       ├── ComponentFactory.java     # Fábrica para construção de componentes visuais
+│       └── SistemaAtendimento.java   # Gerenciamento da interface e telas
+├── src/main/resources/
+│   └── Tela.fxml                     # Arquivo de estilização e layout da interface FXML
+├── module-info.java                  # Configuração de módulos do Java
+└── pom.xml                           # Dependências e ciclo de vida do Maven
 ```
 
 ### Responsabilidade de cada camada
 
 | Camada | Responsabilidade |
 | :--- | :--- |
-| `model` | Entidades de domínio e validações (CPF, idade, tipo) |
-| `model.estrutura` | Implementação da lista duplamente encadeada com inserção ordenada |
-| `service` | Lógica de negócio: qual fila recebe, qual paciente é chamado, ciclo 3:2 |
-| `view` | Interface JavaFX: formulários, painéis e interações com o usuário |
+| `model` | Contém a entidade principal do domínio (Paciente). |
+| `controller` | Controladores de interface que gerenciam as interações do usuário e o fluxo das telas, além do processamento das regras da fila. |
+| `model.estrutura` | Camada dedicada à implementação da estrutura de dados (Lista encadeada/Nós). |
+| `view` | Componentes visuais da interface, fábricas de elementos de tela e execução do layout. |
+| `util` | Classes utilitárias e funções auxiliares desacopladas, como o validador ValidaCPF. |
+| `main` | Ponto de entrada da aplicação, encarregado de inicializar o ciclo de vida do JavaFX. |
 
 ---
 
